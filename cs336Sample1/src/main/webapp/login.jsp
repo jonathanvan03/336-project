@@ -8,26 +8,37 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Transit Login</title>
     </head>
+    
     <body>
         <h2>Login</h2>
         <br>
-        <!-- Form to get username and password -->
+        <!-- Login Form -->
         <form method="post" action="login.jsp">
             Username: <input type="text" name="username" required>
             <br>
             Password: <input type="password" name="password" required/> 
             <br>
-            <input type="submit" value="submit" />
+            <!-- Radio buttons to select user type -->
+            <input type="radio" name="command" value="customer"/> Customer
+            <input type="radio" name="command" value="employee"/> Employee
+            <br>
+            <input type="submit" value="Submit" />
         </form>
         
+        <!-- Registration Link -->
+        <form method="post" action="register.jsp">
+            <br>
+            New Customer? <input type="submit" value="Register Here">
+        </form>
+
         <%
         // Get form parameters
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String command = request.getParameter("command"); // Get the selected role (customer or employee)
 
-        // Check if the username and password are provided
-        if (username != null && password != null) {
-            // Declare variables
+        // Ensure that username, password, and command are provided
+        if (username != null && password != null && command != null) {
             Connection conn = null;
             PreparedStatement stmt = null;
             ResultSet rs = null;
@@ -37,21 +48,32 @@
                 // Get the database connection from ApplicationDB
                 conn = db.getConnection();
 
-                // Query to check username and password
-                String sql = "SELECT * FROM customer WHERE username = ? AND password = ?";
+                // Prepare SQL query based on the selected role
+                String sql = "";
+                if ("customer".equals(command)) {
+                    sql = "SELECT * FROM customer WHERE username = ? AND password = ?";
+                } else if ("employee".equals(command)) {
+                    sql = "SELECT * FROM employee WHERE username = ? AND password = ?";
+                }
+
+                // Prepare and execute the query
                 stmt = conn.prepareStatement(sql);
                 stmt.setString(1, username);
-                stmt.setString(2, password);
+                stmt.setString(2, password); // Ensure passwords are hashed and validated securely
 
                 rs = stmt.executeQuery();
 
                 if (rs.next()) {
-                    // Username and password are correct, start a session
+                    // Start a session if the username and password are correct
                     HttpSession httpsession = request.getSession();
                     httpsession.setAttribute("username", username);
 
-                    // Redirect to the welcome page
-                    response.sendRedirect("welcome.jsp");
+                    // Redirect based on role
+                    if ("customer".equals(command)) {
+                        response.sendRedirect("customer_welcome.jsp");
+                    } else if ("employee".equals(command)) {
+                        response.sendRedirect("employee_welcome.jsp");
+                    }
                 } else {
                     out.println("<p style='color: red;'>Invalid username or password.</p>");
                 }
@@ -59,15 +81,18 @@
                 e.printStackTrace();
                 out.println("<p style='color: red;'>Error: " + e.getMessage() + "</p>");
             } finally {
+                // Close resources
                 try {
-                    // Close the resources
                     if (rs != null) rs.close();
                     if (stmt != null) stmt.close();
-                    if (conn != null) db.closeConnection(conn); // Close connection using ApplicationDB
+                    if (conn != null) db.closeConnection(conn); // Use the closeConnection method from ApplicationDB
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
+        } else {
+            // Display error if any field is missing
+            out.println("<p style='color: red;'>Please fill all fields and select a role.</p>");
         }
         %>
     </body>
