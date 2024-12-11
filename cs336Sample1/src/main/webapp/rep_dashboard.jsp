@@ -50,7 +50,7 @@
 	<h3> See customers with reservations by line and date: </h3>
 	<form method="post" action="customersbylinedate.jsp">
 		Transit Line: <input type="text" name="transit_line" required/>
-		Date(YYYY-MM-DD): <input type="date" name="date" required/>
+		Date: <input type="date" name="date" required/>
 		<input type="submit" value="Get">
 	</form>
         
