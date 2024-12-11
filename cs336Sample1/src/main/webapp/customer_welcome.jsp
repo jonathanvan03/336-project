@@ -55,6 +55,9 @@
         <form action="viewReservation.jsp" method="post">
             <input type="submit" value="View All Reservations">
         </form>
+         <form action="viewInquiry.jsp" method="post">
+            <input type="submit" value="View Questions">
+        </form>
         <br><br>
 
     <h2>Profile Information</h2>
