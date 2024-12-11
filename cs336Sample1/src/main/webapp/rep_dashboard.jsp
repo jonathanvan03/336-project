@@ -7,7 +7,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Rep Dash</title>
+<style>
+        form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .profile-info {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 	<%
@@ -23,5 +32,22 @@
         }
     %>
         <h2>Welcome, <%= username %> to your Customer Representative Dashboard!</h2>
+    <form method="post" action="repMessageView.jsp">
+		<input type="submit" value="View Customer Questions">
+	</form> 
+	<form method="post" action="repViewSchedules.jsp">
+		<input type="submit" value="View Train Schedules">
+	</form>     
+	<form method="post" action="repViewReservations.jsp">
+		<input type="submit" value="View Train Transit Line Reservations">
+	</form> 
+        
+    <br><br>
+	<form method="post" action="logout.jsp">
+		<input type="submit" value="logout">
+	</form>    
+        
+        
+        
 </body>
 </html>

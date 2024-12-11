@@ -73,6 +73,39 @@ INSERT INTO `employee` VALUES ('123-45-6789','Adam','Silver','test_admin','admin
 UNLOCK TABLES;
 
 --
+-- Table structure for table `messages`
+--
+
+DROP TABLE IF EXISTS `messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `messages` (
+  `message_id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `summary` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `answer` text,
+  `status` enum('unanswered','answered') DEFAULT 'unanswered',
+  `answered_by` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`message_id`),
+  KEY `fk_customer_username` (`username`),
+  CONSTRAINT `fk_customer_username` FOREIGN KEY (`username`) REFERENCES `customer` (`username`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `messages`
+--
+
+LOCK TABLES `messages` WRITE;
+/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
+INSERT INTO `messages` VALUES (1,'lbj','Reset Password','I need help resetting my account password.',NULL,'unanswered',NULL,'2024-12-11 19:49:46','2024-12-11 19:49:46'),(2,'jdoe','Refund Policy','Can you explain the refund policy for canceled tickets?','You can request a refund within 30 days.','answered','rep01','2024-12-11 19:49:46','2024-12-11 19:49:46'),(3,'lbj','Food','Hello, are we allowed food and drinks on the train?',NULL,'unanswered',NULL,'2024-12-11 20:15:12','2024-12-11 20:15:12'),(4,'lbj','test','hello?',NULL,'unanswered',NULL,'2024-12-11 20:16:40','2024-12-11 20:16:40'),(5,'lbj','test','hello?',NULL,'unanswered',NULL,'2024-12-11 20:17:04','2024-12-11 20:17:04');
+/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `reservation`
 --
 
@@ -105,7 +138,7 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (1,'2024-12-01 08:00:00','jdoe',100.5,'Trenton','Secaucus Junction','2','NE Corridor Line','Economy','Normal','One'),(2,'2024-12-01 09:00:00','jvan',120.75,'Secaucus Junction','Trenton','1','NE Corridor Line','First','Senior/Child','Round'),(3,'2024-12-02 07:30:00','lbj',150.25,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Business','Normal','Weekly'),(4,'2024-12-02 10:15:00','jdoe',130,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Economy','Normal','One'),(5,'2024-12-03 14:00:00','jvan',110,'Trenton','Secaucus Junction','2','NE Corridor Line','First','Disabled','Round'),(6,'2024-12-03 16:45:00','lbj',140.25,'Secaucus Junction','Trenton','1','NE Corridor Line','Business','Senior/Child','Monthly'),(7,'2024-12-04 11:00:00','jdoe',125.75,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Economy','Normal','One'),(8,'2024-12-04 13:30:00','jvan',135,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','First','Normal','Weekly'),(9,'2024-12-05 09:45:00','lbj',115.5,'Trenton','Secaucus Junction','2','NE Corridor Line','Business','Disabled','Round'),(10,'2024-12-05 15:00:00','jdoe',110,'Secaucus Junction','Trenton','1','NE Corridor Line','Economy','Senior/Child','One'),(11,'2024-12-06 07:00:00','jvan',140.25,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Business','Normal','Weekly'),(12,'2024-12-06 14:30:00','lbj',100,'Trenton','Secaucus Junction','2','NE Corridor Line','Economy','Normal','One'),(13,'2024-12-07 08:00:00','jdoe',105,'Pittsburgh Union Sta','Philadelphia 30th St','4','Amtrak Pennsylvanian','Economy','Normal','One'),(14,'2024-12-07 09:30:00','jvan',125.75,'Pittsburgh Union Sta','Philadelphia 30th St','4','Amtrak Pennsylvanian','First','Senior/Child','Round'),(15,'2024-12-08 07:15:00','lbj',135.5,'Pittsburgh Union Sta','Philadelphia 30th St','4','Amtrak Pennsylvanian','Business','Disabled','Weekly');
+INSERT INTO `reservation` VALUES (1,'2024-12-01 08:00:00','jdoe',100.5,'Trenton','Secaucus Junction','2','NE Corridor Line','Economy','Normal','One'),(2,'2024-12-01 09:00:00','jvan',120.75,'Secaucus Junction','Trenton','1','NE Corridor Line','First','Senior/Child','Round'),(3,'2024-12-02 07:30:00','lbj',150.25,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Business','Normal','Weekly'),(4,'2024-12-02 10:15:00','jdoe',130,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Economy','Normal','One'),(5,'2024-12-03 14:00:00','jvan',110,'Trenton','Secaucus Junction','2','NE Corridor Line','First','Disabled','Round'),(6,'2024-12-03 16:45:00','lbj',140.25,'Secaucus Junction','Trenton','1','NE Corridor Line','Business','Senior/Child','Monthly'),(7,'2024-12-04 11:00:00','jdoe',125.75,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Economy','Normal','One'),(8,'2024-12-04 13:30:00','jvan',135,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','First','Normal','Weekly'),(9,'2024-12-05 09:45:00','lbj',115.5,'Trenton','Secaucus Junction','2','NE Corridor Line','Business','Disabled','Round'),(10,'2024-12-05 15:00:00','jdoe',110,'Secaucus Junction','Trenton','1','NE Corridor Line','Economy','Senior/Child','One'),(11,'2024-12-06 07:00:00','jvan',140.25,'Philadelphia 30th St','Pittsburgh Union Sta','3','Amtrak Pennsylvanian','Business','Normal','Weekly'),(12,'2024-12-06 14:30:00','lbj',100,'Trenton','Secaucus Junction','2','NE Corridor Line','Economy','Normal','One'),(13,'2024-12-07 08:00:00','jdoe',105,'Pittsburgh Union Sta','Philadelphia 30th St','4','Amtrak Pennsylvanian','Economy','Normal','One'),(14,'2024-12-07 09:30:00','jvan',125.75,'Pittsburgh Union Sta','Philadelphia 30th St','4','Amtrak Pennsylvanian','First','Senior/Child','Round'),(15,'2024-12-08 07:15:00','lbj',135.5,'Pittsburgh Union Sta','Philadelphia 30th St','4','Amtrak Pennsylvanian','Business','Disabled','Weekly'),(16,'2024-12-11 14:34:25','lbj',88,'Secaucus Junction','Trenton','1','Train Line Name','First','Senior/Child','One');
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-11 14:09:32
+-- Dump completed on 2024-12-11 15:19:03
