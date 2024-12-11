@@ -84,10 +84,13 @@ CREATE TABLE `reservation` (
   `res_date` datetime DEFAULT NULL,
   `passenger` varchar(20) DEFAULT NULL,
   `fare` float DEFAULT NULL,
-  `origin` int DEFAULT NULL,
-  `destination` int DEFAULT NULL,
+  `origin` varchar(20) DEFAULT NULL,
+  `destination` varchar(20) DEFAULT NULL,
   `train_id` char(4) DEFAULT NULL,
   `line_name` varchar(50) DEFAULT NULL,
+  `class` enum('Business','First','Economy') NOT NULL,
+  `discount` enum('Disabled','Senior/Child','Normal') NOT NULL,
+  `trip` enum('Round','One','Monthly','Weekly') NOT NULL,
   PRIMARY KEY (`res_num`),
   KEY `passenger` (`passenger`),
   KEY `train_id` (`train_id`),
@@ -102,6 +105,21 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
+INSERT INTO `reservation` VALUES (1, '2024-12-01 08:00:00', 'jdoe', 100.50, 'Trenton', 'Secaucus Junction', '2', 'NE Corridor Line', 'Economy', 'Normal', 'One'),
+(2, '2024-12-01 09:00:00', 'jvan', 120.75, 'Secaucus Junction', 'Trenton', '1', 'NE Corridor Line', 'First', 'Senior/Child', 'Round'),
+(3, '2024-12-02 07:30:00', 'lbj', 150.25, 'Philadelphia 30th Street Station', 'Pittsburgh Union Station', '3', 'Amtrak Pennsylvanian', 'Business', 'Normal', 'Weekly'),
+(4, '2024-12-02 10:15:00', 'jdoe', 130.00, 'Philadelphia 30th Street Station', 'Pittsburgh Union Station', '3', 'Amtrak Pennsylvanian', 'Economy', 'Normal', 'One'),
+(5, '2024-12-03 14:00:00', 'jvan', 110.00, 'Trenton', 'Secaucus Junction', '2', 'NE Corridor Line', 'First', 'Disabled', 'Round'),
+(6, '2024-12-03 16:45:00', 'lbj', 140.25, 'Secaucus Junction', 'Trenton', '1', 'NE Corridor Line', 'Business', 'Senior/Child', 'Monthly'),
+(7, '2024-12-04 11:00:00', 'jdoe', 125.75, 'Philadelphia 30th Street Station', 'Pittsburgh Union Station', '3', 'Amtrak Pennsylvanian', 'Economy', 'Normal', 'One'),
+(8, '2024-12-04 13:30:00', 'jvan', 135.00, 'Philadelphia 30th Street Station', 'Pittsburgh Union Station', '3', 'Amtrak Pennsylvanian', 'First', 'Normal', 'Weekly'),
+(9, '2024-12-05 09:45:00', 'lbj', 115.50, 'Trenton', 'Secaucus Junction', '2', 'NE Corridor Line', 'Business', 'Disabled', 'Round'),
+(10, '2024-12-05 15:00:00', 'jdoe', 110.00, 'Secaucus Junction', 'Trenton', '1', 'NE Corridor Line', 'Economy', 'Senior/Child', 'One'),
+(11, '2024-12-06 07:00:00', 'jvan', 140.25, 'Philadelphia 30th Street Station', 'Pittsburgh Union Station', '3', 'Amtrak Pennsylvanian', 'Business', 'Normal', 'Weekly'),
+(12, '2024-12-06 14:30:00', 'lbj', 100.00, 'Trenton', 'Secaucus Junction', '2', 'NE Corridor Line', 'Economy', 'Normal', 'One'),
+(13, '2024-12-07 08:00:00', 'jdoe', 105.00, 'Pittsburgh Union Station', 'Philadelphia 30th Street Station', '4', 'Amtrak Pennsylvanian', 'Economy', 'Normal', 'One'),
+(14, '2024-12-07 09:30:00', 'jvan', 125.75, 'Pittsburgh Union Station', 'Philadelphia 30th Street Station', '4', 'Amtrak Pennsylvanian', 'First', 'Senior/Child', 'Round'),
+(15, '2024-12-08 07:15:00', 'lbj', 135.50, 'Pittsburgh Union Station', 'Philadelphia 30th Street Station', '4', 'Amtrak Pennsylvanian', 'Business', 'Disabled', 'Weekly');
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +151,10 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
-INSERT INTO `schedule` VALUES ('NE Corridor Line','1','Secaucus Junction','Trenton','2024-12-07 00:00:00','2024-12-07 01:44:00',60,NULL),('NE Corridor Line 2','3','Trenton','Secaucus Junction','2024-12-09 00:00:00','2024-12-09 01:44:00',60,NULL),('NE Corridor Line Re','2','Trenton','Secaucus Junction','2024-12-08 00:00:00','2024-12-08 01:44:00',60,NULL);
+INSERT INTO `schedule` VALUES ('NE Corridor Line','1','Secaucus Junction','Trenton','2024-12-07 00:00:00','2024-12-07 01:44:00',60,NULL),
+('NE Corridor Line','2','Trenton','Secaucus Junction','2024-12-08 00:00:00','2024-12-08 01:44:00',60,NULL),
+('Amtrak Pennsylvanian','3','Philadelphia 30th Street Station','Pittsburgh Union Station','2024-12-09 00:00:00','2024-12-09 01:44:00',60,NULL),
+('Amtrak Pennsylvanian','4','Pittsburgh Union Station','Philadelphia 30th Street Station','2024-12-10 00:00:00','2024-12-10 01:44:00',60,NULL);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,7 +180,33 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'Secaucus Junction','Secaucus','NJ'),(2,'Newark Penn Station','Newark','NJ'),(3,'Newark Liberty Inter','Newark','NJ'),(4,'Elizabeth','Elizabeth','NJ'),(5,'Linden','Linden','NJ'),(6,'Rahway','Rahway','NJ'),(7,'Metropark','Iselin','NJ'),(8,'Metuchen','Metuchen','NJ'),(9,'Edison','Edison','NJ'),(10,'New Brunswick','New Brunswick','NJ'),(11,'West Windsor','Princeton Junction','NJ'),(12,'Hamilton','Hamilton','NJ'),(13,'Trenton','Trenton Transit Cent','NJ');
+INSERT INTO `station` VALUES (1,'Secaucus Junction','Secaucus','NJ'),
+(2,'Newark Penn Station','Newark','NJ'),
+(3,'Newark Liberty Inter','Newark','NJ'),
+(4,'Elizabeth','Elizabeth','NJ'),
+(5,'Linden','Linden','NJ'),
+(6,'Rahway','Rahway','NJ'),
+(7,'Metropark','Iselin','NJ'),
+(8,'Metuchen','Metuchen','NJ'),
+(9,'Edison','Edison','NJ'),
+(10,'New Brunswick','New Brunswick','NJ'),
+(11,'West Windsor','Princeton Junction','NJ'),
+(12,'Hamilton','Hamilton','NJ'),
+(13,'Trenton','Trenton Transit Cent','NJ'),
+(14,'Philadelphia 30th Street Station','Philadelphia','PA'),
+(15,'Paoli','Paoli','PA'),
+(16,'Exton','Exton','PA'),
+(17,'Lancaster','Lancaster','PA'),
+(18,'Elizabethtown','Elizabethtown','PA'),
+(19,'Harrisburg Transportation Center','Harrisburg','PA'),
+(20,'Lewistown','Lewistown','PA'),
+(21,'Huntingdon','Huntingdon','PA'),
+(22,'Tyrone','Tyrone','PA'),
+(23,'Altoona Transportation Center','Altoona','PA'),
+(24,'Johnstown','Johnstown','PA'),
+(25,'Latrobe','Latrobe','PA'),
+(26,'Greensburg','Greensburg','PA'),
+(27,'Pittsburgh Union Station','Pittsburgh','PA');
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,7 +233,60 @@ CREATE TABLE `stop` (
 
 LOCK TABLES `stop` WRITE;
 /*!40000 ALTER TABLE `stop` DISABLE KEYS */;
-INSERT INTO `stop` VALUES (1,'2024-12-08 00:08:00','2024-12-08 00:00:00',3),(2,'2024-12-08 00:16:00','2024-12-08 00:08:00',2.5),(3,'2024-12-08 00:24:00','2024-12-08 00:16:00',4),(4,'2024-12-08 00:32:00','2024-12-08 00:24:00',3.5),(5,'2024-12-08 00:40:00','2024-12-08 00:32:00',2),(6,'2024-12-08 00:48:00','2024-12-08 00:40:00',4.5),(7,'2024-12-08 00:56:00','2024-12-08 00:48:00',3),(8,'2024-12-08 01:04:00','2024-12-08 00:56:00',4),(9,'2024-12-08 01:12:00','2024-12-08 01:04:00',5),(10,'2024-12-08 01:20:00','2024-12-08 01:12:00',3.5),(11,'2024-12-08 01:28:00','2024-12-08 01:20:00',2.5),(12,'2024-12-08 01:36:00','2024-12-08 01:28:00',2),(13,'2024-12-08 01:44:00','2024-12-08 01:36:00',4.5);
+INSERT INTO `stop` VALUES (1, '2024-12-07 00:08:00', '2024-12-07 00:00:00', 3),
+(2, '2024-12-07 00:16:00', '2024-12-07 00:08:00', 2.5),
+(3, '2024-12-07 00:24:00', '2024-12-07 00:16:00', 4),
+(4, '2024-12-07 00:32:00', '2024-12-07 00:24:00', 3.5),
+(5, '2024-12-07 00:40:00', '2024-12-07 00:32:00', 2),
+(6, '2024-12-07 00:48:00', '2024-12-07 00:40:00', 4.5),
+(7, '2024-12-07 00:56:00', '2024-12-07 00:48:00', 3),
+(8, '2024-12-07 01:04:00', '2024-12-07 00:56:00', 4),
+(9, '2024-12-07 01:12:00', '2024-12-07 01:04:00', 5),
+(10, '2024-12-07 01:20:00', '2024-12-07 01:12:00', 3.5),
+(11, '2024-12-07 01:28:00', '2024-12-07 01:20:00', 2.5),
+(12, '2024-12-07 01:36:00', '2024-12-07 01:28:00', 2),
+(13, '2024-12-07 01:44:00', '2024-12-07 01:36:00', 4.5),
+(1, '2024-12-08 00:08:00', '2024-12-08 00:00:00', 3),
+(2, '2024-12-08 00:16:00', '2024-12-08 00:08:00', 2.5),
+(3, '2024-12-08 00:24:00', '2024-12-08 00:16:00', 4),
+(4, '2024-12-08 00:32:00', '2024-12-08 00:24:00', 3.5),
+(5, '2024-12-08 00:40:00', '2024-12-08 00:32:00', 2),
+(6, '2024-12-08 00:48:00', '2024-12-08 00:40:00', 4.5),
+(7, '2024-12-08 00:56:00', '2024-12-08 00:48:00', 3),
+(8, '2024-12-08 01:04:00', '2024-12-08 00:56:00', 4),
+(9, '2024-12-08 01:12:00', '2024-12-08 01:04:00', 5),
+(10, '2024-12-08 01:20:00', '2024-12-08 01:12:00', 3.5),
+(11, '2024-12-08 01:28:00', '2024-12-08 01:20:00', 2.5),
+(12, '2024-12-08 01:36:00', '2024-12-08 01:28:00', 2),
+(13, '2024-12-08 01:44:00', '2024-12-08 01:36:00', 4.5),
+(14, '2024-12-09 00:08:00', '2024-12-09 00:00:00', 3),
+(15, '2024-12-09 00:16:00', '2024-12-09 00:08:00', 2.5),
+(16, '2024-12-09 00:24:00', '2024-12-09 00:16:00', 4),
+(17, '2024-12-09 00:32:00', '2024-12-09 00:24:00', 3.5),
+(18, '2024-12-09 00:40:00', '2024-12-09 00:32:00', 2),
+(19, '2024-12-09 00:48:00', '2024-12-09 00:40:00', 4.5),
+(20, '2024-12-09 00:56:00', '2024-12-09 00:48:00', 3),
+(21, '2024-12-09 01:04:00', '2024-12-09 00:56:00', 4),
+(22, '2024-12-09 01:12:00', '2024-12-09 01:04:00', 5),
+(23, '2024-12-09 01:20:00', '2024-12-09 01:12:00', 3.5),
+(24, '2024-12-09 01:28:00', '2024-12-09 01:20:00', 2.5),
+(25, '2024-12-09 01:36:00', '2024-12-09 01:28:00', 2),
+(26, '2024-12-09 01:44:00', '2024-12-09 01:36:00', 4.5),
+(27, '2024-12-09 01:52:00', '2024-12-09 01:44:00', 3),
+(14, '2024-12-10 00:08:00', '2024-12-10 00:00:00', 3),
+(15, '2024-12-10 00:16:00', '2024-12-10 00:08:00', 2.5),
+(16, '2024-12-10 00:24:00', '2024-12-10 00:16:00', 4),
+(17, '2024-12-10 00:32:00', '2024-12-10 00:24:00', 3.5),
+(18, '2024-12-10 00:40:00', '2024-12-10 00:32:00', 2),
+(19, '2024-12-10 00:48:00', '2024-12-10 00:40:00', 4.5),
+(20, '2024-12-10 00:56:00', '2024-12-10 00:48:00', 3),
+(21, '2024-12-10 01:04:00', '2024-12-10 00:56:00', 4),
+(22, '2024-12-10 01:12:00', '2024-12-10 01:04:00', 5),
+(23, '2024-12-10 01:20:00', '2024-12-10 01:12:00', 3.5),
+(24, '2024-12-10 01:28:00', '2024-12-10 01:20:00', 2.5),
+(25, '2024-12-10 01:36:00', '2024-12-10 01:28:00', 2),
+(26, '2024-12-10 01:44:00', '2024-12-10 01:36:00', 4.5),
+(27, '2024-12-10 01:52:00', '2024-12-10 01:44:00', 3);
 /*!40000 ALTER TABLE `stop` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,7 +309,7 @@ CREATE TABLE `train` (
 
 LOCK TABLES `train` WRITE;
 /*!40000 ALTER TABLE `train` DISABLE KEYS */;
-INSERT INTO `train` VALUES ('1'),('2'),('3');
+INSERT INTO `train` VALUES ('1'),('2'),('3'),('4'),('5'),('6'),('7'),('8'),('9'),('10'),('11'),('12');
 /*!40000 ALTER TABLE `train` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
