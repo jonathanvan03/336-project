@@ -40,6 +40,9 @@
             out.println("<th>Destination</th>");
             out.println("<th>Train ID</th>");
             out.println("<th>Line Name</th>");
+	    out.println("<th>Class</th>");
+            out.println("<th>Discount</th>");
+            out.println("<th>Trip</th>");
             out.println("</tr>");
 
             while (rs.next()) {
@@ -47,10 +50,14 @@
                 java.sql.Date res_date = rs.getDate("res_date");
                 String passenger = rs.getString("passenger");
                 double fare = rs.getFloat("fare");
-                int origin = rs.getString("origin");
-                int destination = rs.getString("destination");
+                String origin = rs.getString("origin");
+                String destination = rs.getString("destination");
                 String train_id = rs.getString("train_id");
                 String linename = rs.getString("line_name");
+		String class = rs.getString("class");
+                String discount = rs.getString("discount");
+		String trip = rs.getString("trip");
+                
 
                 out.println("<tr>");
                 out.println("<td>" + res_num + "</td>");
@@ -61,6 +68,9 @@
                 out.println("<td>" + destination + "</td>");
                 out.println("<td>" + train_id + "</td>");
                 out.println("<td>" + linename + "</td>");
+		out.println("<td>" + class + "</td>");
+                out.println("<td>" + discount + "</td>");
+                out.println("<td>" + trip + "</td>");
                 out.println("</tr>");
 
                 count++;
