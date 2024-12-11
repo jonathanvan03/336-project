@@ -224,7 +224,7 @@
 
         <br>
         <!-- Button to go back to Welcome page -->
-        <form action="welcome.jsp" method="get">
+        <form action="customer_welcome.jsp" method="get">
             <input type="submit" value="Back to Welcome">
         </form>
         <br>
