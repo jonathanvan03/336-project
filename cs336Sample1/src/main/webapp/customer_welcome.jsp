@@ -18,6 +18,10 @@
     %>
         <h2>Welcome, <%= username %>!</h2>
         <p>You have successfully logged in.</p>
+        <form action="schedule.jsp" method="post">
+            <input type="submit" value="View Schedule">
+        </form>
+        <br>
         <form action="logout.jsp" method="post">
             <input type="submit" value="Logout">
         </form>
