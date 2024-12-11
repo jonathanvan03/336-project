@@ -47,8 +47,8 @@
                 java.sql.Date res_date = rs.getDate("res_date");
                 String passenger = rs.getString("passenger");
                 double fare = rs.getFloat("fare");
-                int origin = rs.getInt("origin");
-                int destination = rs.getInt("destination");
+                int origin = rs.getString("origin");
+                int destination = rs.getString("destination");
                 String train_id = rs.getString("train_id");
                 String linename = rs.getString("line_name");
 
