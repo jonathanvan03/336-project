@@ -28,7 +28,10 @@
         	<input type="submit" value="View Profile">
         </form>
         <form action="schedule.jsp" method="post">
-            <input type="submit" value="View Train Schedules">
+            <input type="submit" value="View All Train Schedules">
+        </form>
+        <form action="schedReserve.jsp" method="post">
+            <input type="submit" value="Reserve a Train Ticket">
         </form>
         <br><br>
         <form action="logout.jsp" method="post">
