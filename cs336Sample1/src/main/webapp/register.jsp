@@ -42,6 +42,9 @@
         <!-- Go button to submit the form -->
         <input type="submit" value="Go">
     </form>
+    <form method="post" action="login.jsp">
+        <input type="submit" value="Back">
+    </form>
 
     <%
         // Handle form submission for customer registration
@@ -62,30 +65,46 @@
                     ApplicationDB db = new ApplicationDB();
                     Connection conn = null;
                     PreparedStatement stmt = null;
+                    ResultSet rs = null;
 
                     try {
-                        // Insert the new customer data into the database
+                        // Check if the username or email already exists
                         conn = db.getConnection();
-                        String insertSql = "INSERT INTO customer (first_name, last_name, email, password, username) VALUES (?, ?, ?, ?, ?)";
-                        stmt = conn.prepareStatement(insertSql);
-                        stmt.setString(1, firstName);
-                        stmt.setString(2, lastName);
-                        stmt.setString(3, email);
-                        stmt.setString(4, password); // Consider hashing the password before storing it
-                        stmt.setString(5, username);
+                        String checkUserSql = "SELECT * FROM customer WHERE username = ? OR email = ?";
+                        stmt = conn.prepareStatement(checkUserSql);
+                        stmt.setString(1, username);
+                        stmt.setString(2, email);
+                        rs = stmt.executeQuery();
 
-                        // Execute the update
-                        int rowsInserted = stmt.executeUpdate();
-                        if (rowsInserted > 0) {
-                            out.println("<p style='color: green;'>Registration successful! Please <a href='login.jsp'>log in</a>.</p>");
+                        if (rs.next()) {
+                            // Username or email already exists
+                            out.println("<p style='color: red;'>Username or Email already taken. Please choose another one.</p>");
                         } else {
-                            out.println("<p style='color: red;'>Failed to register. Please try again.</p>");
+
+                            // Insert the new customer data into the database
+                            String insertSql = "INSERT INTO customer (first_name, last_name, email, password, username) VALUES (?, ?, ?, ?, ?)";
+                            stmt = conn.prepareStatement(insertSql);
+                            stmt.setString(1, firstName);
+                            stmt.setString(2, lastName);
+                            stmt.setString(3, email);
+                            stmt.setString(4, password); // Store the hashed password
+                            stmt.setString(5, username);
+
+                            // Execute the update
+                            int rowsInserted = stmt.executeUpdate();
+                            if (rowsInserted > 0) {
+                                out.println("<p style='color: green;'>Registration successful! Please <a href='login.jsp'>log in</a>.</p>");
+                            } else {
+                                out.println("<p style='color: red;'>Failed to register. Please try again.</p>");
+                            }
                         }
                     } catch (SQLException e) {
+                        // Handle SQL exception (for example, if there's a database error)
                         e.printStackTrace();
                         out.println("<p style='color: red;'>Error: " + e.getMessage() + "</p>");
                     } finally {
                         try {
+                            if (rs != null) rs.close();
                             if (stmt != null) stmt.close();
                             if (conn != null) db.closeConnection(conn);
                         } catch (SQLException e) {
