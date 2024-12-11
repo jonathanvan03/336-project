@@ -101,7 +101,7 @@ CREATE TABLE `messages` (
 
 LOCK TABLES `messages` WRITE;
 /*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-INSERT INTO `messages` VALUES (1,'lbj','Reset Password','I need help resetting my account password.',NULL,'unanswered',NULL,'2024-12-11 19:49:46','2024-12-11 19:49:46'),(2,'jdoe','Refund Policy','Can you explain the refund policy for canceled tickets?','You can request a refund within 30 days.','answered','rep01','2024-12-11 19:49:46','2024-12-11 19:49:46'),(3,'lbj','Food','Hello, are we allowed food and drinks on the train?',NULL,'unanswered',NULL,'2024-12-11 20:15:12','2024-12-11 20:15:12'),(4,'lbj','test','hello?',NULL,'unanswered',NULL,'2024-12-11 20:16:40','2024-12-11 20:16:40'),(5,'lbj','test','hello?',NULL,'unanswered',NULL,'2024-12-11 20:17:04','2024-12-11 20:17:04');
+INSERT INTO `messages` VALUES (1,'lbj','Reset Password','I need help resetting my account password.','Please check your email for the reset link!','answered','rep01','2024-12-11 19:49:46','2024-12-11 20:36:26'),(2,'jdoe','Refund Policy','Can you explain the refund policy for canceled tickets?','You have up to 30 days from the date of purchase to request a refund!','answered','rep01','2024-12-11 19:49:46','2024-12-11 20:37:27'),(3,'lbj','Food','Hello, are we allowed food and drinks on the train?','Hello, yes. Additional food and drinks are sold in dining cars as well!','answered','rep01','2024-12-11 20:15:12','2024-12-11 20:41:03'),(4,'lbj','test','hello?',NULL,'unanswered',NULL,'2024-12-11 20:16:40','2024-12-11 20:16:40'),(5,'lbj','test','hello?',NULL,'unanswered',NULL,'2024-12-11 20:17:04','2024-12-11 20:17:04');
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-11 15:19:03
+-- Dump completed on 2024-12-11 15:44:47
