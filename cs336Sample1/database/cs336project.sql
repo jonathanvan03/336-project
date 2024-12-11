@@ -57,6 +57,7 @@ CREATE TABLE `employee` (
   `last_name` varchar(20) DEFAULT NULL,
   `username` varchar(20) DEFAULT NULL,
   `password` varchar(20) DEFAULT NULL,
+  `role` enum('admin','rep') NOT NULL DEFAULT 'rep',
   PRIMARY KEY (`ssn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -67,6 +68,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
+INSERT INTO `employee` VALUES ('123-45-6789','test','person','test_admin','admin00','admin');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,6 +87,7 @@ CREATE TABLE `reservation` (
   `origin` int DEFAULT NULL,
   `destination` int DEFAULT NULL,
   `train_id` char(4) DEFAULT NULL,
+  `line_name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`res_num`),
   KEY `passenger` (`passenger`),
   KEY `train_id` (`train_id`),
@@ -112,6 +115,8 @@ DROP TABLE IF EXISTS `schedule`;
 CREATE TABLE `schedule` (
   `transit_line` varchar(20) NOT NULL,
   `train_id` char(4) NOT NULL,
+  `origin` varchar(20) NOT NULL,
+  `destination` varchar(20) NOT NULL,
   `depart_time` datetime NOT NULL,
   `arrival_time` datetime DEFAULT NULL,
   `travel_time` int DEFAULT NULL,
@@ -128,6 +133,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+INSERT INTO `schedule` VALUES ('NE Corridor Line','1','Secaucus Junction','Trenton','2024-12-07 00:00:00','2024-12-07 01:44:00',60,NULL),('NE Corridor Line 2','3','Trenton','Secaucus Junction','2024-12-09 00:00:00','2024-12-09 01:44:00',60,NULL),('NE Corridor Line Re','2','Trenton','Secaucus Junction','2024-12-08 00:00:00','2024-12-08 01:44:00',60,NULL);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,6 +159,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
+INSERT INTO `station` VALUES (1,'Secaucus Junction','Secaucus','NJ'),(2,'Newark Penn Station','Newark','NJ'),(3,'Newark Liberty Inter','Newark','NJ'),(4,'Elizabeth','Elizabeth','NJ'),(5,'Linden','Linden','NJ'),(6,'Rahway','Rahway','NJ'),(7,'Metropark','Iselin','NJ'),(8,'Metuchen','Metuchen','NJ'),(9,'Edison','Edison','NJ'),(10,'New Brunswick','New Brunswick','NJ'),(11,'West Windsor','Princeton Junction','NJ'),(12,'Hamilton','Hamilton','NJ'),(13,'Trenton','Trenton Transit Cent','NJ');
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,6 +174,7 @@ CREATE TABLE `stop` (
   `station_id` int NOT NULL,
   `depart_time` datetime NOT NULL,
   `arrive_time` datetime DEFAULT NULL,
+  `fare` float NOT NULL,
   PRIMARY KEY (`station_id`,`depart_time`),
   CONSTRAINT `stop_ibfk_1` FOREIGN KEY (`station_id`) REFERENCES `station` (`station_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -178,6 +186,7 @@ CREATE TABLE `stop` (
 
 LOCK TABLES `stop` WRITE;
 /*!40000 ALTER TABLE `stop` DISABLE KEYS */;
+INSERT INTO `stop` VALUES (1,'2024-12-08 00:08:00','2024-12-08 00:00:00',3),(2,'2024-12-08 00:16:00','2024-12-08 00:08:00',2.5),(3,'2024-12-08 00:24:00','2024-12-08 00:16:00',4),(4,'2024-12-08 00:32:00','2024-12-08 00:24:00',3.5),(5,'2024-12-08 00:40:00','2024-12-08 00:32:00',2),(6,'2024-12-08 00:48:00','2024-12-08 00:40:00',4.5),(7,'2024-12-08 00:56:00','2024-12-08 00:48:00',3),(8,'2024-12-08 01:04:00','2024-12-08 00:56:00',4),(9,'2024-12-08 01:12:00','2024-12-08 01:04:00',5),(10,'2024-12-08 01:20:00','2024-12-08 01:12:00',3.5),(11,'2024-12-08 01:28:00','2024-12-08 01:20:00',2.5),(12,'2024-12-08 01:36:00','2024-12-08 01:28:00',2),(13,'2024-12-08 01:44:00','2024-12-08 01:36:00',4.5);
 /*!40000 ALTER TABLE `stop` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,6 +209,7 @@ CREATE TABLE `train` (
 
 LOCK TABLES `train` WRITE;
 /*!40000 ALTER TABLE `train` DISABLE KEYS */;
+INSERT INTO `train` VALUES ('1'),('2'),('3');
 /*!40000 ALTER TABLE `train` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -212,4 +222,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-15 23:19:46
+-- Dump completed on 2024-12-10 22:35:52
