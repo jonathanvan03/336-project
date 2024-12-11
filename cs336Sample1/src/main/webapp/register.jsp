@@ -19,7 +19,6 @@
 <body>
     <h2>Customer Registration</h2>
     <form action="register.jsp" method="post">
-        <!-- Input fields for registration -->
         <div class="profile-info">
             <b>First Name:</b> <input type="text" name="first_name" required><br><br>
         </div>
@@ -39,7 +38,6 @@
             <b>Confirm Password:</b> <input type="password" name="confirm_password" required><br><br>
         </div>
         
-        <!-- Go button to submit the form -->
         <input type="submit" value="Go">
     </form>
     <form method="post" action="login.jsp">

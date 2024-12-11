@@ -40,7 +40,6 @@
 	        
 		%>
 			
-		<!--  Make an HTML table to show the results in: -->
 	
 
 			

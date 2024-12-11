@@ -63,7 +63,6 @@
 
             if (transitLine != null && !transitLine.isEmpty()) {
         %>
-            <!-- Schedule Table -->
             <table id="scheduleTable" border="1">
                 <tr>
                     <th>
@@ -138,7 +137,7 @@
                                 <td><%= rs.getString("destination") %></td>
                                 <td><%= rs.getString("depart_time") %></td>
                                 <td><%= rs.getString("arrival_time") %></td>
-                                <td><%= totalFare %></td> <!-- Display the summed fare -->
+                                <td><%= totalFare %></td> 
                                 <td>
                                     <a href="viewStops.jsp?train_id=<%= rs.getString("train_id") %>&depart_time=<%= rs.getString("depart_time") %>">
                                         <%= numStops %>
@@ -162,20 +161,17 @@
         <%
             } else {
         %>
-            <!-- Display a message when no transit line is selected -->
             <p>Please select a transit line to view the schedule.</p>
         <%
             }
         %>
 
         <br>
-        <!-- Button to go back to Welcome page -->
         <form action="customer_welcome.jsp" method="get">
             <input type="submit" value="Back to Welcome">
         </form>
         <br>
 
-        <!-- Logout form -->
         <form action="logout.jsp" method="post">
             <input type="submit" value="Logout">
         </form>

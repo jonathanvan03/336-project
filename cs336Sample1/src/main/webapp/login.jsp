@@ -12,7 +12,6 @@
     <body>
         <h2>Login</h2>
         <br>
-        <!-- Login Form -->
         <form method="post" action="login.jsp">
             Username: <input type="text" name="username" required>
             <br>

@@ -28,7 +28,6 @@
             ResultSet result = stmt.executeQuery();
     %>
     
-    <!-- Create an HTML table to show the results -->
     <table border="1">
         <thead>
             <tr>

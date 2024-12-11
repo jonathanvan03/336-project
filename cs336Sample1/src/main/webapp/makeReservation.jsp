@@ -109,7 +109,6 @@
 
     <h2>Reserve Your Ticket</h2>
 
-    <!-- Display success or error message -->
     <%
         if ("success".equals(reservationStatus)) {
     %>
@@ -126,9 +125,7 @@
         }
     %>
 
-    <!-- Reservation Form -->
     <form action="makeReservation.jsp" method="post" onsubmit="return validateForm()">
-        <!-- Hidden inputs to pass the train details and other necessary data -->
         <input type="hidden" name="train_id" value="<%= trainId %>">
         <input type="hidden" name="origin" value="<%= origin %>">
         <input type="hidden" name="destination" value="<%= destination %>">
@@ -136,10 +133,8 @@
         <input type="hidden" name="depart_time" value="<%= departTime %>">
         <input type="hidden" name="arrival_time" value="<%= arrivalTime %>">
 
-        <!-- Add hidden action field to trigger form submission -->
         <input type="hidden" name="action" value="submit">
 
-        <!-- Train Information -->
         <p><strong>Train ID:</strong> <%= trainId %></p>
         <p><strong>Origin:</strong> <%= origin %></p>
         <p><strong>Destination:</strong> <%= destination %></p>
@@ -147,21 +142,18 @@
         <p><strong>Departure Time:</strong> <%= departTime %></p>
         <p><strong>Arrival Time:</strong> <%= arrivalTime %></p>
 
-        <!-- Class Selection -->
         <label>Class:</label><br>
         <input type="radio" name="class" value="Business" <%= classType.equals("Business") ? "checked" : "" %> > Business
         <input type="radio" name="class" value="First" <%= classType.equals("First") ? "checked" : "" %> > First
         <input type="radio" name="class" value="Economy" <%= classType.equals("Economy") ? "checked" : "" %> > Economy
         <br><br>
 
-        <!-- Discount Selection -->
         <label>Discount:</label><br>
         <input type="radio" name="discount" value="Disabled" <%= discount.equals("Disabled") ? "checked" : "" %> > Disabled
         <input type="radio" name="discount" value="Senior/Child" <%= discount.equals("Senior/Child") ? "checked" : "" %> > Senior/Child
         <input type="radio" name="discount" value="Normal" <%= discount.equals("Normal") ? "checked" : "" %> > Normal
         <br><br>
 
-        <!-- Trip Type -->
         <label>Trip Type:</label><br>
         <input type="radio" name="trip" value="Round" <%= trip.equals("Round") ? "checked" : "" %> > Round
         <input type="radio" name="trip" value="One" <%= trip.equals("One") ? "checked" : "" %> > One

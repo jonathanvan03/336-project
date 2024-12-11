@@ -103,7 +103,6 @@
     %>
 
     <br>
-    <!-- Button to go back to Schedule page -->
     <form action="schedule.jsp" method="get">
         <input type="submit" value="Back to All Schedule">
     </form>
@@ -112,7 +111,6 @@
     </form>
     <br>
 
-    <!-- Logout form -->
     <form action="logout.jsp" method="post">
         <input type="submit" value="Logout">
     </form>

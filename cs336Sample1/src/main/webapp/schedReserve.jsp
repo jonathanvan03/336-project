@@ -34,7 +34,6 @@
         <h2>Reserve a Ticket</h2>
         <p>Use the filters below to view the schedule:</p>
 
-        <!-- Filter Form -->
         <form method="get" action="schedReserve.jsp" id="scheduleForm" onsubmit="return validateForm()">
             <label for="origin">Origin:</label>
             <select name="origin" id="origin">
@@ -80,7 +79,6 @@
         </form>
         <br>
 
-        <!-- Schedule Table -->
         <table id="scheduleTable" border="1">
             <tr>
                 <th>Transit Line</th>
@@ -183,14 +181,13 @@
                             <td><%= rs.getString("destination") %></td>
                             <td><%= rs.getString("depart_time") %></td>
                             <td><%= rs.getString("arrival_time") %></td>
-                            <td><%= totalFare %></td> <!-- Display the summed fare -->
+                            <td><%= totalFare %></td> 
                             <td>
                                 <a href="viewStops.jsp?train_id=<%= rs.getString("train_id") %>&depart_time=<%= rs.getString("depart_time") %>">
                                     <%= numStops %>
                                 </a>
                             </td>
                             <td>
-					        <!-- Add Reserve Button -->
 					        <a href="makeReservation.jsp?train_id=<%= rs.getString("train_id") %>&origin=<%= rs.getString("origin") %>&destination=<%= rs.getString("destination") %>&fare=<%= totalFare %>&depart_time=<%= rs.getString("depart_time") %>&arrival_time=<%= rs.getString("arrival_time") %>">
 					            <button>Reserve</button>
 					        </a>
@@ -212,13 +209,11 @@
         </table>
 
         <br>
-        <!-- Button to go back to Welcome page -->
         <form action="customer_welcome.jsp" method="get">
             <input type="submit" value="Back to Welcome">
         </form>
         <br>
 
-        <!-- Logout form -->
         <form action="logout.jsp" method="post">
             <input type="submit" value="Logout">
         </form>

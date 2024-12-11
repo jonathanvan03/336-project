@@ -25,7 +25,6 @@
 			ResultSet result = stmt.executeQuery(str);
 		%>
 			
-		<!--  Make an HTML table to show the results in: -->
 	<table>
 		<tr>    
 			<td>Revenue by Line</td>
