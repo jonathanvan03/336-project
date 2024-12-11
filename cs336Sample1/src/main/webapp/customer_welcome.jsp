@@ -4,6 +4,12 @@
 <html>
 <head>
     <title>Welcome</title>
+    <style>
+        form {
+            display: inline-block; /* This aligns the forms on the same line */
+            margin-right: 10px; /* Optional: space between the forms */
+        }
+    </style>
 </head>
 <body>
     <%
@@ -18,10 +24,13 @@
     %>
         <h2>Welcome, <%= username %>!</h2>
         <p>You have successfully logged in.</p>
-        <form action="schedule.jsp" method="post">
-            <input type="submit" value="View Schedule">
+        <form action="viewProfile.jsp" method="post">
+        	<input type="submit" value="View Profile">
         </form>
-        <br>
+        <form action="schedule.jsp" method="post">
+            <input type="submit" value="View Train Schedules">
+        </form>
+        <br><br>
         <form action="logout.jsp" method="post">
             <input type="submit" value="Logout">
         </form>
