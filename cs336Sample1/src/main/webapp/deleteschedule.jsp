@@ -16,14 +16,17 @@
 		
 			String transit_line =  request.getParameter("transit_line");
 			String train_id =  request.getParameter("train_id");
-			java.sql.Timestamp depart_time =  request.getParameter("depart_time");
+			String departTimeStr =  request.getParameter("depart_time");
+			Timestamp depart_time = (departTimeStr != null && !departTimeStr.isEmpty()) 
+                    ? Timestamp.valueOf(departTimeStr) 
+                    : null;
 	        
 	        try {
 	        	String deleteSql = "DELETE FROM schedule WHERE transit_line = ? AND train_id = ? AND depart_time = ?";
-	            stmt = con.prepareStatement(checkSql);
+	            stmt = con.prepareStatement(deleteSql);
 	            stmt.setString(1, transit_line);
 	            stmt.setString(2, train_id);
-	            stmt.setString(3, depart_time);
+	            stmt.setTimestamp(3, depart_time);
 	        
 
 	            // Execute the statement

@@ -15,15 +15,30 @@
 			Connection con = db.getConnection();		
 			String transit_line =  request.getParameter("transit_line");
 			String train_id =  request.getParameter("train_id");
-			java.sql.Timestamp depart_time =  request.getParameter("depart_time");
+			String departTimeStr =  request.getParameter("depart_time");
+			Timestamp depart_time = (departTimeStr != null && !departTimeStr.isEmpty()) 
+                    ? Timestamp.valueOf(departTimeStr) 
+                    : null;
 			String newtransit_line =  request.getParameter("new_transit_line");
 			String newtrain_id =  request.getParameter("newtrain_id");
-			java.sql.Timestamp newdepart_time =  request.getParameter("newdepart_time");
+			String newDepartTimeStr = request.getParameter("newdepart_time");
+		    Timestamp newdepart_time = (newDepartTimeStr != null && !newDepartTimeStr.isEmpty()) 
+		                                ? Timestamp.valueOf(newDepartTimeStr) 
+		                                : null;
 			String origin =  request.getParameter("origin");
 			String destination =  request.getParameter("destination");
-			java.sql.Timestamp arrival_time =  request.getParameter("arrival_time");
-			Integer travel_time = request.getParameter("travel_time");
-			Integer num_stops = request.getParameter("num_stops");
+			String arrivalTimeStr = request.getParameter("arrival_time");
+		    Timestamp arrival_time = (arrivalTimeStr != null && !arrivalTimeStr.isEmpty()) 
+		                             ? Timestamp.valueOf(arrivalTimeStr) 
+		                             : null;
+		    String travelTimeStr = request.getParameter("travel_time");
+		    Integer travel_time = (travelTimeStr != null && !travelTimeStr.isEmpty()) 
+		                          ? Integer.valueOf(travelTimeStr) 
+		                          : null;
+		    String numStopsStr = request.getParameter("num_stops");
+		    Integer num_stops = (numStopsStr != null && !numStopsStr.isEmpty()) 
+		                        ? Integer.valueOf(numStopsStr) 
+		                        : null;
 	        try {
 	        	String checkSql = "SELECT * FROM schedule WHERE transit_line = ? AND train_id = ? AND depart_time = ?";
 	            stmt = con.prepareStatement(checkSql);

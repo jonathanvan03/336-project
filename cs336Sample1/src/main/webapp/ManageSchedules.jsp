@@ -20,12 +20,12 @@
             response.sendRedirect("login.jsp");
         } else {
     %>
-        <h1>Manage Customer Representatives</h1>
+        <h1>Manage Schedules</h1>
         <br>
         <br>
       
         <h2>Update an existing schedule: </h2>
-        <form action="editrep.jsp" method="post">
+        <form action="editschedule.jsp" method="post">
         	<p>Update schedule with: </p>
         	Transit Line <input type="text" name="transit_line" required/>
         	Train ID <input type="text" name="train_id" required/>

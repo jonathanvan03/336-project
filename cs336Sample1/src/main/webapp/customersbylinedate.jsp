@@ -16,15 +16,25 @@
             ApplicationDB db = new ApplicationDB();    
             Connection con = db.getConnection();        
             
-            // Get the customer name from the request
+          
             String transit_line = request.getParameter("transit_line");
-            java.sql.Date date = request.getParameter("date");
+            String dateStr = request.getParameter("date");
+            
+            java.sql.Date date = null;
+            if (dateStr != null && !dateStr.isEmpty()) {
+                try {
+                    date = java.sql.Date.valueOf(dateStr); // Convert string to SQL Date
+                } catch (IllegalArgumentException e) {
+                    out.println("<p>Error: Invalid date format. Please use YYYY-MM-DD.</p>");
+                    return; // Exit if the date format is incorrect
+                }
+            }
             
             // Create a SQL statement using a PreparedStatement to prevent SQL injection
-            String sql = "SELECT passenger FROM reservation WHERE line_name = ? AND res_date =?";
+            String sql = "SELECT passenger FROM reservation WHERE line_name = ? AND DATE_FORMAT(res_date, '%Y-%m-%d') =?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, transit_line);
-            stmt.setString(2, res_date);
+            stmt.setDate(2, date);
             
             // Run the query against the database
             ResultSet result = stmt.executeQuery();
