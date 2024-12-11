@@ -57,10 +57,6 @@
                                 <th>Origin</th>
                                 <th>Destination</th>
                                 <th>Fare</th>
-                                <th>Train ID</th>
-                                <th>Class</th>
-                                <th>Discount</th>
-                                <th>Trip Type</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -75,13 +71,9 @@
                                 <td><%= rs.getString("origin") %></td>
                                 <td><%= rs.getString("destination") %></td>
                                 <td>$<%= rs.getFloat("fare") %></td>
-                                <td><%= rs.getString("train_id") %></td>
-                                <td><%= rs.getString("class") %></td>
-                                <td><%= rs.getString("discount") %></td>
-                                <td><%= rs.getString("trip") %></td>
                                 <!-- View Button to cancel or view details of the reservation -->
                                 <td>
-                                    <a href="cancelRes.jsp?res_num=<%= rs.getInt("res_num") %>">Delete</a>
+                                    <a href="cancelRes.jsp?res_num=<%= rs.getInt("res_num") %>">View</a>
                                 </td>
                             </tr>
                             <%
