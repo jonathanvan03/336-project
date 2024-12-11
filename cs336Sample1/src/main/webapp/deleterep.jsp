@@ -1,9 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
-
-<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Add Representative</title>
@@ -14,13 +11,14 @@
 	
 			//Get the database connection
 			ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();		
+			Connection con = db.getConnection();
+			PreparedStatement stmt = null;
 		
 	        String username = request.getParameter("repusername");
 	        
 	        try {
-	        	String deleteSql = "DELETE FROM employees WHERE username = ?";
-	            stmt = conn.prepareStatement(deleteSql);
+	        	String deleteSql = "DELETE FROM employee WHERE username = ?";
+	            stmt = con.prepareStatement(deleteSql);
 	            stmt.setString(1, username);
 
 	            // Execute the statement
@@ -49,7 +47,10 @@
 		<%} catch (Exception e) {
 			out.print(e);
 		}%>
-	
+	<h2>Return</h2>
+	        <form action="admin_dashboard.jsp" method="post">
+	            <input type="submit" value="Back">
+	        </form>
 
 	</body>
 </html>

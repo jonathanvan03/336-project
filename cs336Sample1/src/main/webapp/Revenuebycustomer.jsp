@@ -10,6 +10,7 @@
 		<title>Customer Revenue</title>
 	</head>
 	<body>
+	<h2>Revenue By Customer</h2>
 		<% try {
 	
 			//Get the database connection
@@ -19,7 +20,7 @@
 			//Create a SQL statement
 			Statement stmt = con.createStatement();
 			//Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
-			String str = "SELECT SUM(fare) FROM reservations GROUP BY passenger";
+			String str = "SELECT passenger, SUM(fare) FROM reservation GROUP BY passenger";
 			//Run the query against the database.
 			ResultSet result = stmt.executeQuery(str);
 		%>
@@ -47,7 +48,10 @@
 			db.closeConnection(con);
 			%>
 		</table>
-
+<h2>Return</h2>
+    <form action="admin_dashboard.jsp" method="post">
+        <input type="submit" value="Back">
+    </form>
 			
 		<%} catch (Exception e) {
 			out.print(e);

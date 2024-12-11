@@ -1,9 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Add Representative</title>
@@ -14,28 +12,29 @@
 	
 			//Get the database connection
 			ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();		
+			Connection con = db.getConnection();	
+			PreparedStatement stmt = null;
 			String fname = request.getParameter("repfname");
 			String lname = request.getParameter("replname");
 	        String username = request.getParameter("repusername");
 	        String password = request.getParameter("reppass");
-	        Integer ssn = Integer.parseInt(request.getParameter("repssn"));
+	        String ssn = request.getParameter("repssn");
 	        try {
 	            // Prepare SQL statement
-	            String sql = "INSERT INTO employees (ssn, first_name, last_name, username, password) VALUES (?, ?, ?, ?, ?)";
+	            String sql = "INSERT INTO employee (ssn, first_name, last_name, username, password, role) VALUES (?, ?, ?, ?, ?, 'rep')";
             	stmt = con.prepareStatement(sql);
             	stmt.setString(1, ssn);
             	stmt.setString(2, fname);
-            	stmt.setInt(3, lname);
+            	stmt.setString(3, lname);
             	stmt.setString(4, username);
             	stmt.setString(5, password);
 
 	            // Execute the statement
 	            int rowsInserted = stmt.executeUpdate();
 	            if (rowsInserted > 0) {
-	                out.println("<p>New entry has been successfully created!</p>");
+	                out.println("<p>New customer rep has been successfully created!</p>");
 	            } else {
-	                out.println("<p>Failed to create new entry.</p>");
+	                out.println("<p>Failed to create new customer rep. Please Try Again</p>");
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -57,6 +56,8 @@
 			out.print(e);
 		}%>
 	
-
+	<form action="ManageReps.jsp" method="post">
+		<input type="submit" value="back">
+	</form>
 	</body>
 </html>

@@ -38,7 +38,7 @@
         <form action="editrep.jsp" method="post">
         	Update representative account with username: <input type="text" name="repusername" required/>
         	<p>Only populate fields you wish to update</p>
-        	SSN: <input type="number" name="repssn"/>
+        	SSN: <input type="text" name="repssn"/>
         	First name: <input type="text" name="repfname" />
         	Last name: <input type="text" name="replname" />
         	Username: <input type="text" name="newrepusername" />
@@ -48,7 +48,7 @@
         <br>
         <br>
         <h2>Delete representative account: </h2>
-        <form action="deleterep.php" method="post">
+        <form action="deleterep.jsp" method="post">
         	Delete representative account with username: <input type="text" name="repusername" required/>
             <input type="submit" value="Go">
         </form>

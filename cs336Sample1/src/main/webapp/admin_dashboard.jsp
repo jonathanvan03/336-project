@@ -41,7 +41,7 @@
         <br>
         <p>Get reservations by customer:</p>
         <form action="Reservationsbycustomer.jsp" method="post">
-            Customer name: <input type="text" name="cust_name" required/>
+            Customer username: <input type="text" name="cust_name" required/>
         <input type="submit" value="Get">
         </form>
         <br>

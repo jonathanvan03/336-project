@@ -7,9 +7,10 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Customer Revenue</title>
+		<title>Most Active Lines</title>
 	</head>
 	<body>
+	<h2>5 Most Active Lines</h2>
 		<% try {
 	
 			//Get the database connection
@@ -19,7 +20,7 @@
 			//Create a SQL statement
 			Statement stmt = con.createStatement();
 			//Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
-			String str = "SELECT linename, COUNT(*) FROM reservations GROUP BY linename ORDER BY COUNT(*) DESC LIMIT 5";
+			String str = "SELECT line_name, COUNT(*) FROM reservation GROUP BY line_name ORDER BY COUNT(*) DESC LIMIT 5";
 			//Run the query against the database.
 			ResultSet result = stmt.executeQuery(str);
 		%>
@@ -27,14 +28,14 @@
 		<!--  Make an HTML table to show the results in: -->
 	<table>
 		<tr>    
-			<td>5 Most Active Lines</td>
+			
 
 		</tr>
 			<%
 			//parse out the results
 			while (result.next()) { %>
 				<tr>    
-					<td><%= result.getString("linename") %></td>
+					<td><%= result.getString("line_name") %></td>
 		
 				</tr>
 				
@@ -49,7 +50,10 @@
 		<%} catch (Exception e) {
 			out.print(e);
 		}%>
-	
+	<h2>Return</h2>
+    <form action="admin_dashboard.jsp" method="post">
+        <input type="submit" value="Back">
+    </form>
 
 	</body>
 </html>

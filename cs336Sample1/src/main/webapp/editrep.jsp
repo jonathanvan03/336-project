@@ -1,9 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
-
-<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Edit Representative</title>
@@ -14,33 +11,35 @@
 	
 			//Get the database connection
 			ApplicationDB db = new ApplicationDB();	
+			PreparedStatement stmt = null;
 			Connection con = db.getConnection();		
-			String username = = request.getParameter("repusername");
+			String username =  request.getParameter("repusername");
 			String fname = request.getParameter("repfname");
 			String lname = request.getParameter("replname");
 	        String newusername = request.getParameter("newrepusername");
 	        String password = request.getParameter("reppass");
-	        Integer ssn = Integer.parseInt(request.getParameter("repssn"));
-	        try {
-	        	String checkSql = "SELECT * FROM employees WHERE username = ?";
-	            stmt = conn.prepareStatement(checkSql);
+	        String ssn = request.getParameter("repssn");
+	        	String checkSql = "SELECT * FROM employee WHERE username = ?";
+	            stmt = con.prepareStatement(checkSql);
 	            stmt.setString(1, username);
-	            rs = stmt.executeQuery();
+	            ResultSet rs = stmt.executeQuery();
 
 	            if (rs.next()) {
 	                // Prepare the update statement
-	                StringBuilder updateSql = new StringBuilder("UPDATE employees SET ");
+	                StringBuilder updateSql = new StringBuilder("UPDATE employee SET ");
 	                boolean first = true;
 
 	                if (fname != null && !fname.isEmpty()) {
+	                    if (!first) updateSql.append(", ");
 	                    updateSql.append("first_name = ?");
 	                    first = false;
 	                }
 	                if (lname != null && !lname.isEmpty()) {
+	                    if (!first) updateSql.append(", ");
 	                    updateSql.append("last_name = ?");
 	                    first = false;
 	                }
-	                if (ssn != null) {
+	                if (ssn != null && !ssn.isEmpty()) {
 	                    if (!first) updateSql.append(", ");
 	                    updateSql.append("ssn = ?");
 	                    first = false;
@@ -65,8 +64,8 @@
 	                if (lname != null && !lname.isEmpty()) {
 	                    stmt.setString(paramIndex++, lname);
 	                }
-	                if (ssn != null) {
-	                    stmt.setInt(paramIndex++, ssn);
+	                if (ssn != null && !ssn.isEmpty()) {
+	                    stmt.setString(paramIndex++, ssn);
 	                }
 	                if (newusername != null && !newusername.isEmpty()) {
 	                    stmt.setString(paramIndex++, newusername);
@@ -88,22 +87,22 @@
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            out.println("<p>Error occurred: " + e.getMessage() + "</p>");
-	        } finally {
-	            // Close resources
-	            if (stmt != null) try { stmt.close(); } catch (SQLException e) {}
-	            if (con != null) try { con.close(); } catch (SQLException e) {}
 	        }
 	       
 	        
 		%>
 			
-		<!--  Make an HTML table to show the results in: -->
 	
 
 			
-		<%} catch (Exception e) {
-			out.print(e);
-		}%>
+		
+		<h2>Return</h2>
+	        <form action="ManageReps.jsp" method="post">
+	            <input type="submit" value="Back">
+	        </form>
+	        <form action="admin_dashboard.jsp" method="post">
+	            <input type="submit" value="Back to Dashboard">
+	        </form>
 	
 
 	</body>
