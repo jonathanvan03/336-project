@@ -25,7 +25,7 @@
         <br>
         <h2>Add a new representative: </h2>
         <form action="addrep.jsp" method="post">
-        	SSN: <input type="number" name="repssn" required/>
+        	SSN: <input type="text" name="repssn" required/>
         	First name: <input type="text" name="repfname" required/>
         	Last name: <input type="text" name="replname" required/>
         	Username: <input type="text" name="repusername" required/>

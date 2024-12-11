@@ -1,19 +1,24 @@
-<%@ page import="javax.servlet.http.*, javax.servlet.*" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome</title>
+    <title>Customer Welcome</title>
     <style>
         form {
-            display: inline-block; /* This aligns the forms on the same line */
-            margin-right: 10px; /* Optional: space between the forms */
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .profile-info {
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <%
-        // Check if the user is logged in by looking for a session attribute
+        // Get the session and username
         HttpSession httpsession = request.getSession(false); // Don't create a new session if it doesn't exist
         String username = (httpsession != null) ? (String) httpsession.getAttribute("username") : null;
 
@@ -21,7 +26,25 @@
             // If no session, redirect to login page
             response.sendRedirect("login.jsp");
         } else {
+            ApplicationDB db = new ApplicationDB();
+            Connection conn = null;
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+
+            // Fetch the user's profile information from the database
+            try {
+                conn = db.getConnection();
+                String selectSql = "SELECT * FROM customer WHERE username = ?";
+                stmt = conn.prepareStatement(selectSql);
+                stmt.setString(1, username);
+                rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+                    String email = rs.getString("email");
     %>
+<<<<<<< Updated upstream
         <h2>Welcome, <%= username %>!</h2>
         <p>You have successfully logged in.</p>
         <form action="viewProfile.jsp" method="post">
@@ -37,7 +60,48 @@
         <form action="logout.jsp" method="post">
             <input type="submit" value="Logout">
         </form>
+=======
+
+    <h2>Welcome, <%= username %>!</h2>
+    <p>You have successfully logged in.</p>
+
+    <form action="schedule.jsp" method="post">
+        <input type="submit" value="View Train Schedules">
+    </form>
+
+    <h2>Profile Information</h2>
+    <div class="profile-info">
+        <b>First Name:</b> <%= firstName %>
+    </div>
+    <div class="profile-info">
+        <b>Last Name:</b> <%= lastName %>
+    </div>
+    <div class="profile-info">
+        <b>Email:</b> <%= email %>
+    </div>
+
+    <br><br>
+    <form action="logout.jsp" method="post">
+        <input type="submit" value="Logout">
+    </form>
+
+>>>>>>> Stashed changes
     <%
+                } else {
+                    out.println("<p>User not found!</p>");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                out.println("<p style='color: red;'>Error: " + e.getMessage() + "</p>");
+            } finally {
+                try {
+                    if (rs != null) rs.close();
+                    if (stmt != null) stmt.close();
+                    if (conn != null) db.closeConnection(conn);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     %>
 </body>
