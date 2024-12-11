@@ -40,7 +40,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES ('jdoe','password123','jdoe@gmail.com','john','doe'),('jvan','jonathan123','jvan@gmail.com','jonathan','van'),('lbj','goat','lbj@gmail.com','lebron','james');
+INSERT INTO `customer` VALUES ('demo-customer','demopassword','demo@gmail.com','Demo','Customer'),('jdoe','password123','jdoe@gmail.com','john','doe'),('jvan','jonathan123','jvan@gmail.com','jonathan','van'),('lbj','goat','lbj@gmail.com','lebron','james');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +68,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES ('123-45-6789','Adam','Silver','test_admin','admin00','admin'),('454-52-6752','Jon','Jones','rep01','test','rep');
+INSERT INTO `employee` VALUES ('123-45-6789','Adam','Silver','test_admin','admin00','admin'),('124-49-2394','Demo','Rep','demo-rep','demopassword','rep'),('143-25-3857','Demo','Person','demo-adm','demopassword','admin'),('454-52-6752','Jon','Jones','rep01','test','rep');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-11 15:44:47
+-- Dump completed on 2024-12-11 16:01:46
