@@ -46,9 +46,6 @@
     %>
         <h2>Welcome, <%= username %>!</h2>
         <p>You have successfully logged in.</p>
-        <form action="viewProfile.jsp" method="post">
-        	<input type="submit" value="View Profile">
-        </form>
         <form action="schedule.jsp" method="post">
             <input type="submit" value="View All Train Schedules">
         </form>
@@ -56,16 +53,6 @@
             <input type="submit" value="Reserve a Train Ticket">
         </form>
         <br><br>
-        <form action="logout.jsp" method="post">
-            <input type="submit" value="Logout">
-        </form>
-
-    <h2>Welcome, <%= username %>!</h2>
-    <p>You have successfully logged in.</p>
-
-    <form action="schedule.jsp" method="post">
-        <input type="submit" value="View Train Schedules">
-    </form>
 
     <h2>Profile Information</h2>
     <div class="profile-info">
