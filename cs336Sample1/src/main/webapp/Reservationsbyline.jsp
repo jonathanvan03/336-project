@@ -40,6 +40,9 @@
                 <th>Destination</th>
                 <th>Train ID</th>
                 <th>Line Name</th>
+                <th>Class</th>
+                <th>Discount</th>
+                <th>Trip</th>
             </tr>
         </thead>
         <tbody>
@@ -56,6 +59,9 @@
                     <td><%= result.getString("destination") %></td>
                     <td><%= result.getString("train_id") %></td>
                     <td><%= result.getString("line_name") %></td>
+                    <td><%= result.getString("class") %></td>
+                    <td><%= result.getString("discount") %></td>
+                    <td><%= result.getString("trip") %></td>
                 </tr>
             <%
             }
