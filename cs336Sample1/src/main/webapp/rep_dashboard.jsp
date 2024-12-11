@@ -40,7 +40,19 @@
 	</form>     
 	<form method="post" action="repViewReservations.jsp">
 		<input type="submit" value="View Train Transit Line Reservations">
-	</form> 
+	</form>
+	<br>
+	<h3> Manage Schedules </h3>
+	<form method="post" action="ManageSchedules.jsp">
+		<input type="submit" value="Go">
+	</form>
+	<br>
+	<h3> See customers with reservations by line and date: </h3>
+	<form method="post" action="customersbylinedate.jsp">
+		Transit Line: <input type="text" name="transit_line" required/>
+		Date(YYYY-MM-DD): <input type="date" name="date" required/>
+		<input type="submit" value="Get">
+	</form>
         
     <br><br>
 	<form method="post" action="logout.jsp">
