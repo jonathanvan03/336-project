@@ -44,7 +44,6 @@
                     String lastName = rs.getString("last_name");
                     String email = rs.getString("email");
     %>
-<<<<<<< Updated upstream
         <h2>Welcome, <%= username %>!</h2>
         <p>You have successfully logged in.</p>
         <form action="viewProfile.jsp" method="post">
@@ -60,7 +59,6 @@
         <form action="logout.jsp" method="post">
             <input type="submit" value="Logout">
         </form>
-=======
 
     <h2>Welcome, <%= username %>!</h2>
     <p>You have successfully logged in.</p>
@@ -85,7 +83,6 @@
         <input type="submit" value="Logout">
     </form>
 
->>>>>>> Stashed changes
     <%
                 } else {
                     out.println("<p>User not found!</p>");
