@@ -31,7 +31,7 @@ public class ApplicationDB {
 		}
 		try {
 			//Create a connection to your DB
-			connection = DriverManager.getConnection(connectionUrl,"root", "Pop-ems5384mysql");
+			connection = DriverManager.getConnection(connectionUrl,"root", "Cs336project");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
