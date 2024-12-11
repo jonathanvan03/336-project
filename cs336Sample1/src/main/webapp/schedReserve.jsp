@@ -1,36 +1,22 @@
 <%@ page import="java.io.*, java.sql.*, javax.servlet.http.*, javax.servlet.*" %>
-<%@ page import="com.cs336.pkg.ApplicationDB" %>  <!-- Ensure ApplicationDB is imported -->
+<%@ page import="com.cs336.pkg.ApplicationDB" %> <!-- Ensure ApplicationDB is imported -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Schedule</title>
+    <title>Reserve a Ticket</title>
     <script type="text/javascript">
-        // This function resets the form fields to the default values
-        function resetForm() {
-            document.getElementById("scheduleForm").reset();
-            // Also make sure to reset the 'date' field to an empty string if necessary
-            document.getElementById("date").value = '';
-        }
+        // This function checks if all fields are selected before submitting the form
+        function validateForm() {
+            var origin = document.getElementById("origin").value;
+            var destination = document.getElementById("destination").value;
+            var date = document.getElementById("date").value;
 
-        // This function is called when a field changes
-        function resetOtherFields(changedField) {
-            // Get all form fields
-            var origin = document.getElementById("origin");
-            var destination = document.getElementById("destination");
-            var date = document.getElementById("date");
-
-            // Reset other fields to their default values if one field is changed
-            if (changedField === "origin") {
-                destination.value = "";  // Reset destination to default (empty)
-                date.value = "";  // Reset date to default (empty)
-            } else if (changedField === "destination") {
-                origin.value = "";  // Reset origin to default (empty)
-                date.value = "";  // Reset date to default (empty)
-            } else if (changedField === "date") {
-                origin.value = "";  // Reset origin to default (empty)
-                destination.value = "";  // Reset destination to default (empty)
+            if (origin === "" || destination === "" || date === "") {
+                alert("Please fill out all the fields (Origin, Destination, Date).");
+                return false;  // Prevent form submission
             }
+            return true;  // Allow form submission
         }
     </script>
 </head>
@@ -45,13 +31,13 @@
             response.sendRedirect("login.jsp");
         } else {
     %>
-        <h2>Welcome, <%= username %>!</h2>
+        <h2>Reserve a Ticket</h2>
         <p>Use the filters below to view the schedule:</p>
 
         <!-- Filter Form -->
-        <form method="get" action="schedule.jsp" id="scheduleForm">
+        <form method="get" action="schedReserve.jsp" id="scheduleForm" onsubmit="return validateForm()">
             <label for="origin">Origin:</label>
-            <select name="origin" id="origin" onchange="resetOtherFields('origin')">
+            <select name="origin" id="origin">
                 <option value="">Select Origin</option>
                 <%
                     // Declare the db and conn variables once
@@ -71,7 +57,7 @@
             </select>
 
             <label for="destination">Destination:</label>
-            <select name="destination" id="destination" onchange="resetOtherFields('destination')">
+            <select name="destination" id="destination">
                 <option value="">Select Destination</option>
                 <%
                     PreparedStatement destinationStmt = conn.prepareStatement("SELECT DISTINCT destination FROM schedule");
@@ -88,12 +74,9 @@
             </select>
 
             <label for="date">Date of Travel:</label>
-            <input type="date" name="date" id="date" value="<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>" onchange="resetOtherFields('date')">
+            <input type="date" name="date" id="date" value="<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>">
 
             <input type="submit" value="Search">
-
-            <!-- Reset Button -->
-            <input type="button" value="Reset" onclick="resetForm()">
         </form>
         <br>
 
@@ -105,19 +88,19 @@
                 <th>Origin</th>
                 <th>Destination</th>
                 <th>
-                    <a href="schedule.jsp?origin=<%= request.getParameter("origin") != null ? request.getParameter("origin") : "" %>&destination=<%= request.getParameter("destination") != null ? request.getParameter("destination") : "" %>&date=<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>&sort_by=depart_time&sort_order=<%= 
+                    <a href="schedReserve.jsp?origin=<%= request.getParameter("origin") != null ? request.getParameter("origin") : "" %>&destination=<%= request.getParameter("destination") != null ? request.getParameter("destination") : "" %>&date=<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>&sort_by=depart_time&sort_order=<%= 
                         "depart_time".equals(request.getParameter("sort_by")) && "asc".equals(request.getParameter("sort_order")) ? "desc" : "asc" %>">
                         Departure Time
                     </a>
                 </th>
                 <th>
-                    <a href="schedule.jsp?origin=<%= request.getParameter("origin") != null ? request.getParameter("origin") : "" %>&destination=<%= request.getParameter("destination") != null ? request.getParameter("destination") : "" %>&date=<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>&sort_by=arrival_time&sort_order=<%= 
+                    <a href="schedReserve.jsp?origin=<%= request.getParameter("origin") != null ? request.getParameter("origin") : "" %>&destination=<%= request.getParameter("destination") != null ? request.getParameter("destination") : "" %>&date=<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>&sort_by=arrival_time&sort_order=<%= 
                         "arrival_time".equals(request.getParameter("sort_by")) && "asc".equals(request.getParameter("sort_order")) ? "desc" : "asc" %>">
                         Arrival Time
                     </a>
                 </th>
                 <th>
-                    <a href="schedule.jsp?origin=<%= request.getParameter("origin") != null ? request.getParameter("origin") : "" %>&destination=<%= request.getParameter("destination") != null ? request.getParameter("destination") : "" %>&date=<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>&sort_by=total_fare&sort_order=<%= 
+                    <a href="schedReserve.jsp?origin=<%= request.getParameter("origin") != null ? request.getParameter("origin") : "" %>&destination=<%= request.getParameter("destination") != null ? request.getParameter("destination") : "" %>&date=<%= request.getParameter("date") != null ? request.getParameter("date") : "" %>&sort_by=total_fare&sort_order=<%= 
                         "total_fare".equals(request.getParameter("sort_by")) && "asc".equals(request.getParameter("sort_order")) ? "desc" : "asc" %>">
                         Fare
                     </a>
@@ -206,6 +189,12 @@
                                     <%= numStops %>
                                 </a>
                             </td>
+                            <td>
+					        <!-- Add Reserve Button -->
+					        <a href="makeReservation.jsp?train_id=<%= rs.getString("train_id") %>&origin=<%= rs.getString("origin") %>&destination=<%= rs.getString("destination") %>&fare=<%= totalFare %>&depart_time=<%= rs.getString("depart_time") %>&arrival_time=<%= rs.getString("arrival_time") %>">
+					            <button>Reserve</button>
+					        </a>
+					    	</td>
                         </tr>
             <%
                     }

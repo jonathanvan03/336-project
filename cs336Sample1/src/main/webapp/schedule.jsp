@@ -17,7 +17,7 @@
             response.sendRedirect("login.jsp");
         } else {
     %>
-        <h2>Welcome, <%= username %>!</h2>
+        <h2>View All Train Schedules</h2>
         <p>Select a transit line to view the schedule:</p>
 
         <!-- Filter Form (Only for transit line selection) -->

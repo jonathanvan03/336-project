@@ -52,6 +52,9 @@
         <form action="schedReserve.jsp" method="post">
             <input type="submit" value="Reserve a Train Ticket">
         </form>
+        <form action="viewReservation.jsp" method="post">
+            <input type="submit" value="View All Reservations">
+        </form>
         <br><br>
 
     <h2>Profile Information</h2>

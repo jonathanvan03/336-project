@@ -105,7 +105,10 @@
     <br>
     <!-- Button to go back to Schedule page -->
     <form action="schedule.jsp" method="get">
-        <input type="submit" value="Back to Schedule">
+        <input type="submit" value="Back to All Schedule">
+    </form>
+    <form action="schedReserve.jsp" method="get">
+        <input type="submit" value="Back to Make Reservations">
     </form>
     <br>
 
