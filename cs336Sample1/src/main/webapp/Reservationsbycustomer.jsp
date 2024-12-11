@@ -52,8 +52,8 @@
                     <td><%= result.getDate("res_date") %></td>
                     <td><%= result.getString("passenger") %></td>
                     <td><%= result.getDouble("fare") %></td>
-                    <td><%= result.getInt("origin") %></td>
-                    <td><%= result.getInt("destination") %></td>
+                    <td><%= result.getString("origin") %></td>
+                    <td><%= result.getString("destination") %></td>
                     <td><%= result.getString("train_id") %></td>
                     <td><%= result.getString("line_name") %></td>
                 </tr>
