@@ -10,6 +10,7 @@
     </head>
     
     <body>
+    	<h1>Welcome to the Transit Web App</h1>
         <h2>Login</h2>
         <br>
         <form method="post" action="login.jsp">

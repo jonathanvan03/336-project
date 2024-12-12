@@ -35,25 +35,19 @@
     <form method="post" action="repMessageView.jsp">
 		<input type="submit" value="View Customer Questions">
 	</form> 
-	<form method="post" action="repViewSchedules.jsp">
-		<input type="submit" value="View Train Schedules">
+	<form method="post" action="ManageSchedules.jsp">
+		<input type="submit" value="View/Edit Train Schedules">
 	</form>     
-	<form method="post" action="repViewReservations.jsp">
+	<form method="post" action="customersbylinedate.jsp">
 		<input type="submit" value="View Train Transit Line Reservations">
 	</form>
 	<br>
-	<h3> Manage Schedules </h3>
-	<form method="post" action="ManageSchedules.jsp">
+	<h3> Show schedules for Station </h3>
+	<form method="post" action="repStationSchedules.jsp">
 		<input type="submit" value="Go">
 	</form>
 	<br>
-	<h3> See customers with reservations by line and date: </h3>
-	<form method="post" action="customersbylinedate.jsp">
-		Transit Line: <input type="text" name="transit_line" required/>
-		Date: <input type="date" name="date" required/>
-		<input type="submit" value="Get">
-	</form>
-        
+	
     <br><br>
 	<form method="post" action="logout.jsp">
 		<input type="submit" value="logout">
