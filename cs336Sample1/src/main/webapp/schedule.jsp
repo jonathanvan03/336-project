@@ -123,7 +123,7 @@
                         String departTime = rs.getString("depart_time");
                         String arrivalTime = rs.getString("arrival_time");
                         float totalFare = rs.getFloat("total_fare");
-                        int numStops = rs.getInt("num_stops");
+                        int numStops = rs.getInt(9);
                 %>
                         <tr>
                             <td><%= origin %></td>

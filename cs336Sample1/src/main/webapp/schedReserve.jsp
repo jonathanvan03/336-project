@@ -19,6 +19,36 @@
 
             return true;  // Allow form submission
         }
+
+        // JavaScript function to build the URL and redirect
+        function redirectToReservation() {
+            var originStation = document.getElementById("origin_station").value;
+            var destinationStation = document.getElementById("destination_station").value;
+
+            if (originStation === "" || destinationStation === "") {
+                alert("Please select both Origin and Destination stations.");
+                return false;  // Prevent form submission if stations are not selected
+            }
+
+            // Hardcoded parameters for the URL
+            var trainId = 3;  // Example train_id, change as necessary
+            var fare = 18.0;  // Example fare, change as necessary
+            var departTime = "2024-12-09 00:32:00.0";  // Example departure time, change as necessary
+            var arrivalTime = "2024-12-09 01:12:00.0";  // Example arrival time, change as necessary
+
+            // Construct the URL with the selected values
+            var url = "http://localhost:8080/cs336Sample1/makeReservation.jsp?" +
+                      "train_id=" + trainId + "&" +
+                      "origin=" + encodeURIComponent(originStation) + "&" +
+                      "destination=" + encodeURIComponent(destinationStation) + "&" +
+                      "fare=" + fare + "&" +
+                      "depart_time=" + encodeURIComponent(departTime) + "&" +
+                      "arrival_time=" + encodeURIComponent(arrivalTime);
+
+            // Redirect to the constructed URL
+            window.location.href = url;
+            return false;  // Prevent form submission, we handle the redirection with JavaScript
+        }
     </script>
 </head>
 <body>
@@ -148,7 +178,9 @@
         <%
             if (hasResults) {
         %>
-            <form method="get" action="makeReservation.jsp">
+        <br>
+                <br>
+            <form method="get" action="javascript:void(0);" onsubmit="return redirectToReservation();">
                 <label for="origin_station">Origin Station:</label>
                 <select name="origin_station" id="origin_station">
                     <option value="">Select Origin Station</option>
