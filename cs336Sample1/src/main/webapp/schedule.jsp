@@ -1,169 +1,162 @@
 <%@ page import="java.io.*, java.sql.*, javax.servlet.http.*, javax.servlet.*" %>
-<%@ page import="com.cs336.pkg.ApplicationDB" %>  <!-- Ensure ApplicationDB is imported -->
+<%@ page import="com.cs336.pkg.ApplicationDB" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Schedule</title>
+    <title>Train Schedules</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <%
         // Check if the user is logged in by looking for a session attribute
-        HttpSession httpsession = request.getSession(false); // Don't create a new session if it doesn't exist
+        HttpSession httpsession = request.getSession(false);
         String username = (httpsession != null) ? (String) httpsession.getAttribute("username") : null;
 
         if (username == null) {
-            // If no session, redirect to login page
             response.sendRedirect("login.jsp");
         } else {
     %>
-        <h2>View All Train Schedules</h2>
-        <p>Select a transit line to view the schedule:</p>
+        <h2>View Train Schedules</h2>
+        <p>Select a transit line to filter schedules:</p>
 
-        <!-- Filter Form (Only for transit line selection) -->
-        <form method="get" action="schedule.jsp" id="scheduleForm">
+        <!-- Transit Line Dropdown Form -->
+        <form method="get" action="schedule.jsp">
             <label for="transit_line">Transit Line:</label>
             <select name="transit_line" id="transit_line">
-                <option value="">Select Transit Line</option>
+                <option value="">All Transit Lines</option>
                 <%
-                    // Declare the db and conn variables once
-                    ApplicationDB db = new ApplicationDB();  // Use the ApplicationDB class
-                    Connection conn = db.getConnection();   // Get the connection
-                    PreparedStatement transitStmt = conn.prepareStatement("SELECT DISTINCT transit_line FROM schedule");
-                    ResultSet transitRs = transitStmt.executeQuery();
-                    while (transitRs.next()) {
-                        String transitLine = transitRs.getString("transit_line");
+                    ApplicationDB db = new ApplicationDB();
+                    Connection conn = null;
+                    PreparedStatement stmt = null;
+                    ResultSet transitRs = null;
+
+                    try {
+                        conn = db.getConnection();
+                        String transitQuery = "SELECT DISTINCT transit_line FROM schedule";
+                        stmt = conn.prepareStatement(transitQuery);
+                        transitRs = stmt.executeQuery();
+
+                        while (transitRs.next()) {
+                            String transitLine = transitRs.getString("transit_line");
                 %>
-                    <option value="<%= transitLine %>" <%= request.getParameter("transit_line") != null && request.getParameter("transit_line").equals(transitLine) ? "selected" : "" %>><%= transitLine %></option>
+                            <option value="<%= transitLine %>" <%= request.getParameter("transit_line") != null && request.getParameter("transit_line").equals(transitLine) ? "selected" : "" %>>
+                                <%= transitLine %>
+                            </option>
                 <%
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        out.println("<p style='color: red;'>Error loading transit lines: " + e.getMessage() + "</p>");
+                    } finally {
+                        if (transitRs != null) transitRs.close();
+                        if (stmt != null) stmt.close();
                     }
-                    transitRs.close();
-                    transitStmt.close();
                 %>
             </select>
-
             <input type="submit" value="Search">
         </form>
-        <br>
 
         <%
-            // Retrieve the selected transit line and sort criteria from the request
+            // Retrieve the selected transit line
             String transitLine = request.getParameter("transit_line");
-            String sortBy = request.getParameter("sort_by");
-            String sortOrder = request.getParameter("sort_order");
 
-            // Default sorting if not specified
-            if (sortBy == null) {
-                sortBy = "depart_time";
-                sortOrder = "asc";
-            }
-            if (sortOrder == null) {
-                sortOrder = "asc";
-            }
+            // Build the SQL query
+            String sql = "SELECT s.*, " +
+                         "(SELECT COUNT(DISTINCT station_id) FROM stop WHERE train_id = s.train_id AND depart_time BETWEEN s.depart_time AND s.arrival_time) AS num_stops, " +
+                         "(SELECT SUM(fare) FROM stop WHERE train_id = s.train_id AND depart_time BETWEEN s.depart_time AND s.arrival_time) AS total_fare " +
+                         "FROM schedule s";
 
             if (transitLine != null && !transitLine.isEmpty()) {
+                sql += " WHERE s.transit_line = ?";
+            }
+
+            sql += " ORDER BY s.depart_time ASC";
+
+            // Execute the query
+            PreparedStatement scheduleStmt = null;
+            ResultSet rs = null;
+
+            try {
+                scheduleStmt = conn.prepareStatement(sql);
+
+                if (transitLine != null && !transitLine.isEmpty()) {
+                    scheduleStmt.setString(1, transitLine);
+                }
+
+                rs = scheduleStmt.executeQuery();
         %>
-            <table id="scheduleTable" border="1">
+
+        <table>
+            <thead>
                 <tr>
-                    <th>
-                        <a href="schedule.jsp?transit_line=<%= transitLine %>&sort_by=origin&sort_order=<%= 
-                            "origin".equals(sortBy) && "asc".equals(sortOrder) ? "desc" : "asc" %>">
-                            Origin Station
-                        </a>
-                    </th>
-                    <th>
-                        <a href="schedule.jsp?transit_line=<%= transitLine %>&sort_by=destination&sort_order=<%= 
-                            "destination".equals(sortBy) && "asc".equals(sortOrder) ? "desc" : "asc" %>">
-                            Destination Station
-                        </a>
-                    </th>
-                    <th>
-                        <a href="schedule.jsp?transit_line=<%= transitLine %>&sort_by=depart_time&sort_order=<%= 
-                            "depart_time".equals(sortBy) && "asc".equals(sortOrder) ? "desc" : "asc" %>">
-                            Departure Time
-                        </a>
-                    </th>
-                    <th>
-                        <a href="schedule.jsp?transit_line=<%= transitLine %>&sort_by=arrival_time&sort_order=<%= 
-                            "arrival_time".equals(sortBy) && "asc".equals(sortOrder) ? "desc" : "asc" %>">
-                            Arrival Time
-                        </a>
-                    </th>
-                    <th>
-                        <a href="schedule.jsp?transit_line=<%= transitLine %>&sort_by=total_fare&sort_order=<%= 
-                            "total_fare".equals(sortBy) && "asc".equals(sortOrder) ? "desc" : "asc" %>">
-                            Fare
-                        </a>
-                    </th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Total Fare</th>
                     <th>Number of Stops</th>
                 </tr>
+            </thead>
+            <tbody>
                 <%
-                    // Build the SQL query based on the selected transit line and sorting criteria
-                    StringBuilder sql = new StringBuilder("SELECT s.*, " +
-                        "(SELECT COUNT(DISTINCT station_id) FROM stop WHERE train_id = s.train_id AND depart_time BETWEEN s.depart_time AND s.arrival_time) AS num_stops, " +
-                        "(SELECT SUM(fare) FROM stop WHERE train_id = s.train_id AND depart_time BETWEEN s.depart_time AND s.arrival_time) AS total_fare " +
-                        "FROM schedule s WHERE s.transit_line = ?");
+                    boolean hasResults = false;
 
-                    // Append the ORDER BY clause dynamically
-                    sql.append(" ORDER BY ").append(sortBy).append(" ").append(sortOrder);
-
-                    // Fetch results using the existing db and conn variables
-                    try {
-                        PreparedStatement stmt = conn.prepareStatement(sql.toString());
-                        stmt.setString(1, transitLine); // Set the selected transit line
-
-                        ResultSet rs = stmt.executeQuery();
-
-                        // Loop through the result set and display in table
-                        while (rs.next()) {
-                            String trainId = rs.getString("train_id");
-                            // Query to calculate the number of stops and fare for this train
-                            String stopQuery = "SELECT COUNT(DISTINCT station_id) AS num_stops, SUM(fare) AS total_fare " +
-                                                "FROM stop WHERE station_id IN (SELECT station_id FROM stop WHERE depart_time BETWEEN ? AND ?)";
-                            PreparedStatement stopStmt = conn.prepareStatement(stopQuery);
-                            stopStmt.setString(1, rs.getString("depart_time"));
-                            stopStmt.setString(2, rs.getString("arrival_time"));
-                            ResultSet rsStops = stopStmt.executeQuery();
-
-                            int numStops = 0;
-                            float totalFare = 0.0f;
-                            if (rsStops.next()) {
-                                numStops = rsStops.getInt("num_stops");
-                                totalFare = rsStops.getFloat("total_fare");
-                            }
+                    while (rs.next()) {
+                        hasResults = true;
+                        String origin = rs.getString("origin");
+                        String destination = rs.getString("destination");
+                        String departTime = rs.getString("depart_time");
+                        String arrivalTime = rs.getString("arrival_time");
+                        float totalFare = rs.getFloat("total_fare");
+                        int numStops = rs.getInt("num_stops");
                 %>
-                             <tr>
-                                <td><%= rs.getString("origin") %></td>
-                                <td><%= rs.getString("destination") %></td>
-                                <td><%= rs.getString("depart_time") %></td>
-                                <td><%= rs.getString("arrival_time") %></td>
-                                <td><%= totalFare %></td> 
-                                <td>
-                                    <a href="viewStops.jsp?train_id=<%= rs.getString("train_id") %>&depart_time=<%= rs.getString("depart_time") %>">
-                                        <%= numStops %>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td><%= origin %></td>
+                            <td><%= destination %></td>
+                            <td><%= departTime %></td>
+                            <td><%= arrivalTime %></td>
+                            <td><%= totalFare %></td>
+                            <td><%= numStops %></td>
+                        </tr>
                 <%
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        out.println("<p style='color: red;'>Error: " + e.getMessage() + "</p>");
-                    } finally {
-                        try {
-                            if (conn != null) conn.close();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                    }
+
+                    if (!hasResults) {
+                %>
+                        <tr>
+                            <td colspan="6">No schedules found.</td>
+                        </tr>
+                <%
                     }
                 %>
-            </table>
+            </tbody>
+        </table>
+
         <%
-            } else {
-        %>
-            <p>Please select a transit line to view the schedule.</p>
-        <%
+            } catch (SQLException e) {
+                e.printStackTrace();
+                out.println("<p style='color: red;'>Error loading schedules: " + e.getMessage() + "</p>");
+            } finally {
+                if (rs != null) rs.close();
+                if (scheduleStmt != null) scheduleStmt.close();
+                if (conn != null) db.closeConnection(conn);
             }
+        }
         %>
 
         <br>
@@ -175,8 +168,6 @@
         <form action="logout.jsp" method="post">
             <input type="submit" value="Logout">
         </form>
-    <%
-        }
-    %>
+
 </body>
 </html>
