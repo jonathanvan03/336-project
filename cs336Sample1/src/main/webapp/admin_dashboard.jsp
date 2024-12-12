@@ -50,7 +50,7 @@
         <input type="submit" value="Get">
         </form>
         <br>
-        <p>See reservations by customer:</p>
+        <p>See revenue by customer:</p>
         <form action="Revenuebycustomer.jsp" method="post">
         <input type="submit" value="Get">
         </form>
