@@ -47,12 +47,11 @@
 
             // Now query to get all stops for the specified train_id, depart_time, and arrival_time
             String stopQuery = "SELECT s.station_id, s.arrive_time, s.depart_time, s.fare, st.station_name, st.city, st.state " +
-                               "FROM stop s " +
-                               "JOIN station st ON s.station_id = st.station_id " +
-                               "WHERE s.station_id IN (" +
-                               "    SELECT station_id FROM stop WHERE depart_time BETWEEN ? AND ?" +
-                               ") " +
-                               "ORDER BY s.depart_time";  // Order stops by departure time
+                   "FROM stop s " +
+                   "JOIN station st ON s.station_id = st.station_id " +
+                   "WHERE s.depart_time BETWEEN ? AND ? " +  // Filter stops by depart_time between depart_time and arrival_time
+                   "ORDER BY s.depart_time";  // Order stops by departure time
+
 
             stmt = conn.prepareStatement(stopQuery);
             stmt.setString(1, departTime);  // Set depart_time
@@ -78,8 +77,8 @@
                     out.println("<td>" + stationName + "</td>");
                     out.println("<td>" + city + "</td>");
                     out.println("<td>" + state + "</td>");
-                    out.println("<td>" + stationArriveTime + "</td>");
                     out.println("<td>" + stationDepartureTime + "</td>");
+                    out.println("<td>" + stationArriveTime + "</td>");
                     out.println("<td>" + fare + "</td>");  // Display the fare
                     out.println("</tr>");
                 } while (rs.next());
@@ -106,13 +105,13 @@
     <form action="schedule.jsp" method="get">
         <input type="submit" value="Back to All Schedule">
     </form>
+    <br>
+    <form action="schedReserve.jsp" method="post">
+            <input type="submit" value="Reserve a Train Ticket">
+        </form>
+        <br>
     <form action="schedReserve.jsp" method="get">
         <input type="submit" value="Back to Make Reservations">
-    </form>
-    <br>
-
-    <form action="logout.jsp" method="post">
-        <input type="submit" value="Logout">
     </form>
 </body>
 </html>
